@@ -1,0 +1,15 @@
+# Tüm node_modules klasörlerini yok say
+**/node_modules
+
+# Tüm .env dosyalarını yok say
+**/.env
+
+# Backend'in yükleme klasörünü yok say
+/shelf-scanner-backend/uploads/
+
+# React'in derleme (build) çıktılarını yok say
+/shelf-scanner-frontend/dist/
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db

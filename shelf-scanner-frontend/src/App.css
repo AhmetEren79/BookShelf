@@ -1,0 +1,64 @@
+/* src/App.css dosyasının en altına ekle */
+
+.section {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left; /* Bölüm içlerini sola hizala */
+  color: #333; /* <-- BU SATIRI EKLE (Yazı rengini koyu yap) */
+}
+
+.section h2 {
+  margin-top: 0;
+  text-align: center; /* Bölüm başlıklarını ortala */
+}
+
+.preference-form {
+  display: flex; /* Metin kutusu ve butonu yan yana getir */
+  gap: 10px; /* Aralarına boşluk koy */
+  margin-bottom: 20px;
+}
+
+.text-input {
+  flex-grow: 1; /* Metin kutusunun kalan boşluğu doldurmasını sağla */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.preference-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.preference-list li {
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+/* src/App.css dosyasının en altına ekle */
+
+.book-list-container {
+  margin-top: 20px;
+}
+
+.book-list-container h3 {
+  margin-bottom: 10px;
+}
+
+.book-list-pre {
+  background-color: #f8f9fa; /* Açık gri arka plan */
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  white-space: pre-wrap; /* Uzun satırların aşağı kaymasını sağlar */
+  word-wrap: break-word; /* Kelimeleri kırar */
+  font-family: Consolas, 'Courier New', monospace; /* Kod yazı tipi */
+  color: #212529; /* Koyu yazı rengi */
+}
