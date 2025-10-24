@@ -19,11 +19,11 @@ app.use(express.json()); // JSON body'lerini parse etmek için
 
 // --- Veritabanı Bağlantı Kurulumu ---
 const pool = new Pool({
-    user: 'postgres', // Normal boşluklar kullanıldı
-    host: 'localhost',
-    database: 'shelf_scanner',
-    password: 'admin',
-    port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost', // Docker için 'db', yerel için 'localhost'
+  database: process.env.DB_DATABASE || 'shelf_scanner',
+  password: process.env.DB_PASSWORD || 'admin',
+  port: parseInt(process.env.DB_PORT || '5432'),
 });
 
 async function initializeDatabase() {
