@@ -1,21 +1,21 @@
 # BookShelf/docker-compose.yml
 
-version: '3.8' # Docker Compose sürümü
+version: '3.8' 
 
 services:
   # 1. Veritabanı Servisi
   db:
-    image: postgres:16-alpine # Belirli bir sürüm kullanmak daha iyidir
-    container_name: bookshelf_db # İsim çakışmasın diye değiştirdim
-    restart: unless-stopped # Manuel durdurulmadıkça yeniden başlat
+    image: postgres:16-alpine 
+    container_name: bookshelf_db 
+    restart: unless-stopped 
     environment:
-      POSTGRES_USER: postgres # Kullanıcı adı (varsayılan)
-      POSTGRES_PASSWORD: admin # Güvenlik için normalde .env'den alınmalı
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: admin 
       POSTGRES_DB: shelf_scanner
     ports:
-      - "5432:5432" # Host:Container
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Verileri kalıcı yap
+      - postgres_data:/var/lib/postgresql/data 
 
   # 2. Backend Servisi
   backend:
@@ -25,30 +25,25 @@ services:
     ports:
       - "3001:3001" # Host:Container
     depends_on:
-      - db # Başlamadan önce 'db'nin hazır olmasını bekle
+      - db 
     environment:
-      NODE_ENV: production # Veya development
-      # Veritabanı bağlantı bilgileri (server.js içindekilerle eşleşmeli ama host farklı)
+      NODE_ENV: production  
       DB_USER: postgres
-      DB_HOST: db # Servis adıyla bağlanıyoruz, localhost değil!
+      DB_HOST: db 
       DB_DATABASE: shelf_scanner
       DB_PASSWORD: admin
       DB_PORT: 5432
-      # API anahtarını ana .env dosyasından alacak
       OPENAI_API_KEY: ${OPENAI_API_KEY} 
-    # volumes: # Kod değişikliklerini anında görmek için (opsiyonel, geliştirme sırasında)
-    #   - ./shelf-scanner-backend:/app
-    #   - /app/node_modules # node_modules'ı host ile eşleme
 
   # 3. Frontend Servisi
   frontend:
-    build: ./shelf-scanner-frontend # Frontend Dockerfile'ının olduğu klasör
+    build: ./shelf-scanner-frontend 
     container_name: bookshelf_frontend
     restart: unless-stopped
     ports:
-      - "5173:80" # Host portu 5173'ü Nginx'in 80 portuna bağla
+      - "5173:80" 
     depends_on:
-      - backend # Backend'in başlamasını beklemesi iyi olabilir
+      - backend 
 
-volumes: # Veritabanı verilerinin saklanacağı yerel volume
+volumes:
   postgres_data:
