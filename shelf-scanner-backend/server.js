@@ -1,6 +1,4 @@
 // server.js
-
-// 1. dotenv'i en üste dahil et (çok önemli)
 require('dotenv').config(); 
 
 const express = require('express');
@@ -8,19 +6,19 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const { Pool } = require('pg');
-const axios = require('axios'); // <-- 1. axios'u dahil et
-const fs = require('fs'); // <-- 1. Dosya okumak/silmek için 'fs' modülünü dahil et
+const axios = require('axios'); 
+const fs = require('fs'); 
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
-app.use(express.json()); // JSON body'lerini parse etmek için
+app.use(express.json()); 
 
 // --- Veritabanı Bağlantı Kurulumu ---
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost', // Docker için 'db', yerel için 'localhost'
+  host: process.env.DB_HOST || 'localhost', 
   database: process.env.DB_DATABASE || 'shelf_scanner',
   password: process.env.DB_PASSWORD || 'admin',
   port: parseInt(process.env.DB_PORT || '5432'),
@@ -31,7 +29,6 @@ async function initializeDatabase() {
     try {
         client = await pool.connect();
         console.log('PostgreSQL veritabanına başarıyla bağlanıldı!');
-        // Hatalı boşluklardan arındırılmış SQL sorgusu
         const createTableQuery = `
 CREATE TABLE IF NOT EXISTS preferences (
     id SERIAL PRIMARY KEY,
@@ -48,19 +45,16 @@ CREATE TABLE IF NOT EXISTS preferences (
     }
 }
 
-// --- Multer Kurulumu ---
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// --- API Uç Noktaları (Endpoints) ---
+
 
 app.get('/', (req, res) => {
     res.send('Merhaba! Bu Shelf Scanner Backend Sunucusu!');
 });
 
-// (CREATE) Tercih ekleme
-// (CREATE) Tercih ekleme - YZ DESTEKLİ
-// (CREATE) Tercih ekleme - GÜNCELLENMİŞ YZ DESTEKLİ
 app.post('/api/preferences', async (req, res) => {
   // 1. React'ten sadece ham metni al
   const { category } = req.body; 
@@ -77,10 +71,7 @@ app.post('/api/preferences', async (req, res) => {
   let client;
 
   try {
-    // 3. ADIM: YZ'ya metnin duygusunu sor (GÜNCELLENMİŞ TALİMAT)
     console.log(`Duygu analizi için YZ'ya soruluyor: "${category}"`);
-    
-    // YZ Talimatını basitleştirdik: Sadece 'POZITIF' veya 'NEGATIF' istiyoruz
     const sentimentPrompt = `
       Kullanıcı bir okuma tercihi girdi. Lütfen bu cümlenin genel duygusunu analiz et.
       Cümle: "${category}"
@@ -108,12 +99,9 @@ app.post('/api/preferences', async (req, res) => {
 
     const sentiment = aiResponse.data.choices[0].message.content.toUpperCase().trim();
     console.log(`YZ Cevabı: ${sentiment}`);
-
-    // 4. ADIM: YZ'nın cevabına göre 'likes' değerini belirle (GÜNCELLENMİŞ MANTIK)
-    // Artık çok daha basit: YZ "POZITIF" derse 'true', demezse 'false'.
     const likes = (sentiment === 'POZITIF');
 
-    // 5. ADIM: Veritabanına kaydet
+    //  Veritabanına kaydet
     client = await pool.connect();
     const queryText = 'INSERT INTO preferences (category, likes) VALUES ($1, $2) RETURNING *';
     const queryValues = [category, likes]; 
@@ -204,7 +192,7 @@ app.post('/api/upload', upload.single('bookImage'), async (req, res) => {
         const bookListText = visionResponse.data.choices[0].message.content;
         console.log('Adım 1 Başarılı. Tanınan Kitaplar:', bookListText);
 
-        // --- ADIM 2: VERİTABANINDAN TERCİHLERİ ÇEK ---
+        // ---  VERİTABANINDAN TERCİHLERİ ÇEK ---
         console.log('Adım 2: Veritabanından tercihler çekiliyor...');
         client = await pool.connect();
         const prefsResult = await client.query('SELECT * FROM preferences'); 
@@ -215,7 +203,7 @@ app.post('/api/upload', upload.single('bookImage'), async (req, res) => {
         }).join(', ');
         console.log('Adım 2 Başarılı. Kullanıcı Tercihleri:', userPreferencesText);
 
-        // --- ADIM 3: KİŞİSELLEŞTİRİLMİŞ ÖNERİ İÇİN YZ'YA TEKRAR SOR ---
+        // ---  KİŞİSELLEŞTİRİLMİŞ ÖNERİ İÇİN YZ'YA TEKRAR SOR ---
         console.log('Adım 3: Kişiselleştirilmiş öneri oluşturuluyor (Text API)...');
         
         const recommendationPrompt = `
@@ -253,7 +241,7 @@ app.post('/api/upload', upload.single('bookImage'), async (req, res) => {
         const recommendationText = recommendationResponse.data.choices[0].message.content;
         console.log('Adım 3 Başarılı. Öneri Metni:', recommendationText);
 
-        // --- ADIM 4: REACT'E ÖNERİ METNİNİ GÖNDER ---
+        // --- REACT'E ÖNERİ METNİNİ GÖNDER ---
         res.json({ 
             message: 'Kişiselleştirilmiş öneriler hazır!',
             books: recommendationText

@@ -10,15 +10,8 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preferences, setPreferences] = useState([]);
   const [newPreference, setNewPreference] = useState('');
-  
-  // YENİ: YZ'dan gelen kitap listesi metnini saklamak için
   const [bookList, setBookList] = useState('');
-  
-  // YENİ: Yükleme (Loading) durumunu yönetmek için
   const [isLoading, setIsLoading] = useState(false);
-
-  // --- FONKSİYONLAR ---
-
   const fetchPreferences = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/preferences');
@@ -28,18 +21,14 @@ function App() {
       console.error('Tercihler yüklenirken hata:', error);
     }
   };
-// App.jsx içindeki "FONKSİYONLAR" bölümüne ekle
 
-  // YENİ FONKSİYON: Tercih silme
   const handleDeletePreference = async (id) => {
-    // Kullanıcıya onaylatmak her zaman iyi bir fikirdir
+ 
     if (!window.confirm('Bu tercihi silmek istediğinizden emin misiniz?')) {
-      return; // "İptal" derse işlemi durdur
+      return; 
     }
 
     try {
-      // Backend'de oluşturduğumuz yeni API endpoint'ine DELETE isteği at
-      // URL'nin sonuna silinecek ID'yi ekliyoruz
       const response = await fetch(`http://localhost:3001/api/preferences/${id}`, {
         method: 'DELETE',
       });
@@ -47,8 +36,8 @@ function App() {
       const data = await response.json();
 
       if (response.ok) {
-        setMesaj(data.message); // "Tercih başarıyla silindi."
-        fetchPreferences(); // Silme işleminden sonra listeyi YENİLE
+        setMesaj(data.message); 
+        fetchPreferences(); 
       } else {
         setMesaj(`Hata: ${data.message}`);
       }
@@ -63,18 +52,16 @@ function App() {
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-    setMesaj(''); // Eski mesajları temizle
-    setBookList(''); // Eski kitap listesini temizle
+    setMesaj(''); 
+    setBookList(''); 
   };
 
-  // 'Kitapları Tara' butonu fonksiyonunu GÜNCELLE
   const handleScanClick = async () => {
     if (!selectedFile) {
       alert('Lütfen önce bir fotoğraf seçin!');
       return;
     }
-    
-    // Yükleme durumunu başlat
+
     setIsLoading(true);
     setMesaj('Fotoğraf analiz ediliyor... Bu 30 saniye sürebilir.'); // Kullanıcıyı bilgilendir
     setBookList('');
@@ -92,10 +79,10 @@ function App() {
 
       if (response.ok) {
         // Başarılı ise...
-        setMesaj(data.message); // "Kitaplar başarıyla tanındı!"
-        setBookList(data.books); // Gelen kitap listesi metni
+        setMesaj(data.message); 
+        setBookList(data.books); 
       } else {
-        // Hata varsa (örn: 500 sunucu hatası)
+
         setMesaj(`Hata: ${data.message}`);
       }
       
@@ -103,25 +90,24 @@ function App() {
       console.error('Dosya yüklenirken hata oluştu:', error);
       setMesaj('Bağlantı hatası: Fotoğraf yüklenemedi.');
     } finally {
-      // Ne olursa olsun yükleme durumunu bitir
+
       setIsLoading(false); 
     }
   };
   
   const handleSavePreference = async () => {
-    // ... (Bu fonksiyon aynı, değişiklik yok) ...
+
     if (!newPreference) {
       alert('Lütfen bir kategori adı girin (örn: Fantastik)');
       return;
     }
     try {
-      // 1. Frontend artık analiz yapmıyor, sadece ham metni gönderiyor
       const response = await fetch('http://localhost:3001/api/preferences', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', 
         },
-        // Sadece 'category' (yani metnin kendisi) gönderiliyor
+        
         body: JSON.stringify({ category: newPreference }), 
       });
       
@@ -139,12 +125,9 @@ function App() {
     }
   };
 
-  // --- HTML (JSX) Alanı ---
-  // --- HTML (JSX) Alanı ---
-  // --- HTML (JSX) Alanı ---
   return (
     <div className="container">
-      {/* Başlığı CSS'e uygun hale getirmek için <span> ekledik */}
+      {}
       <h1>Shelf Scanner <span>Projesi</span></h1>
 
       {/* 3. BÖLÜM: Sunucu Mesaj Alanı (YENİ VE DOĞRU YERİ BURASI) */}
@@ -182,12 +165,12 @@ function App() {
               <ul>
                 {preferences.map((pref) => (
                   <li key={pref.id}>
-                    {/* Yazı kısmı */}
+                    {}
                     <span>
                       {pref.category} (Likes: {pref.likes ? 'Evet' : 'Hayır'})
                     </span>
                     
-                    {/* Sil butonu */}
+                    {}
                     <button 
                       onClick={() => handleDeletePreference(pref.id)} 
                       className="delete-btn"
@@ -201,7 +184,7 @@ function App() {
           </div>
         </div>
         
-        {/* 2. BÖLÜM: Fotoğraf Tarama (Sağ Sütun) */}
+        {}
         <div className="section">
           <h2>Fotoğraf Tara</h2>
           <p>Lütfen taranacak kitap rafının fotoğrafını seçin.</p>
@@ -211,7 +194,7 @@ function App() {
             onChange={handleFileChange}
             className="file-input"
           />
-          {/* Butonu, yükleme (isLoading) sırasında pasif yap */}
+          {}
           <button onClick={handleScanClick} disabled={!selectedFile || isLoading}>
             {isLoading ? 'Analiz Ediliyor...' : 'Fotoğrafı Tara'}
           </button>
@@ -228,9 +211,9 @@ function App() {
         </div>
         
       </div>
-      {/* ANA YERLEŞİM DİV'İ BİTİŞ */}
+      {}
 
-      {/* Sunucu mesaj alanı artık burada DEĞİL, yukarı taşındı */}
+      {}
 
     </div>
   );
