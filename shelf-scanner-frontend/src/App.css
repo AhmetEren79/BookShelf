@@ -1,64 +1,302 @@
-/* src/App.css dosyasının en altına ekle */
+/*
+ * YENİ ve GELİŞTİRİLMİŞ App.css
+ * Modern, koyu tema
+ */
 
-.section {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+/* 1. Global Ayarlar ve Renk Paleti (CSS Değişkenleri) */
+:root {
+  --bg-color: #242424; /* Ana koyu arka plan */
+  --card-bg: #2d2d2d;  /* Kart (section) arka planı */
+  --border-color: #444;
+  --text-primary: #f0f0f0;  /* Ana metin rengi */
+  --text-secondary: #adb5bd; /* İkincil, soluk metin */
+  
+  --primary-color: #007BFF;  /* Ana Vurgu Rengi (Mavi) */
+  --primary-hover: #0056b3;
+  
+  --danger-color: #e53e3e;   /* Sil butonu kırmızısı */
+  --danger-hover: #c53030;
+  
+  --success-color: #48bb78;  /* Başarı mesajı yeşili */
+  
+  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* 2. Tüm sayfaya koyu temayı ve fontu uygula */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* 3. Ana Konteyner (Tüm içeriği sarar) */
+.container {
+  max-width: 800px;
+  margin: 30px auto;
   padding: 20px;
-  margin-top: 20px;
-  text-align: left; /* Bölüm içlerini sola hizala */
-  color: #333; /* <-- BU SATIRI EKLE (Yazı rengini koyu yap) */
+  background-color: transparent; /* Konteynerin kendisi görünmez */
+  text-align: center;
+}
+
+/* Ana Başlık */
+h1 {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 2.5rem; /* Daha büyük */
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+h1 span { /* Başlığa küçük bir vurgu ekleyebiliriz */
+  color: var(--primary-color);
+}
+
+/* 4. Kart (Section) Stilleri (En önemli değişiklik) */
+.section {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 25px;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Kartların üzerine gelince hafif bir efekt */
+.section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .section h2 {
   margin-top: 0;
-  text-align: center; /* Bölüm başlıklarını ortala */
+  text-align: center;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 1.75rem;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 25px;
 }
 
-.preference-form {
-  display: flex; /* Metin kutusu ve butonu yan yana getir */
-  gap: 10px; /* Aralarına boşluk koy */
+.section p {
+  color: var(--text-secondary);
+  text-align: center;
   margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+/* 5. Form Elemanları (Düğmeler ve Girdiler) */
+button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+button:disabled,
+button[disabled] {
+  background-color: #555;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Metin Giriş Alanı */
+.text-input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #444;
+  color: var(--text-primary);
+  width: 100%;
+  box-sizing: border-box; /* Padding'i genişliğe dahil et */
+}
+
+.text-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Dosya Seçme Alanı */
+.file-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 25px 0;
+  padding: 10px;
+  background-color: var(--card-bg);
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.file-input:hover {
+  border-color: var(--primary-color);
+}
+
+/* Dosya seçme input'u içindeki sahte buton */
+.file-input::file-selector-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.file-input::file-selector-button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 6. Tercih Alanı Stilleri */
+.preference-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
 }
 
 .text-input {
-  flex-grow: 1; /* Metin kutusunun kalan boşluğu doldurmasını sağla */
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  flex-grow: 1; /* Formda kalan boşluğu doldur */
+}
+
+.preference-form button {
+  flex-shrink: 0; /* Küçülmesin */
+}
+
+.preference-list h3 {
+  color: var(--text-primary);
+  font-weight: 500;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 5px;
 }
 
 .preference-list ul {
   list-style-type: none;
   padding-left: 0;
+  margin-top: 15px;
 }
 
 .preference-list li {
-  background-color: #f8f9fa;
-  border: 1px solid #eee;
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #444; /* Liste öğesi arka planı */
+  border: 1px solid var(--border-color);
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  word-break: break-word; /* Uzun tercihler taşmasın */
+}
+
+.preference-list li:hover {
+  background-color: #4f4f4f;
+}
+
+/* Sil Butonu */
+.delete-btn {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: 10px; /* Yazı ile arasında boşluk */
+}
+
+.delete-btn:hover {
+  background-color: var(--danger-hover);
+  box-shadow: none; /* Sil butonuna gölge gerekmez */
+}
+
+/* 7. Fotoğraf Tarama ve Sonuç Alanları */
+.book-list-container {
+  margin-top: 25px;
+}
+
+.book-list-container h3 {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* YZ'nın cevap alanı (önemli) */
+.book-list-pre {
+  background-color: #242424; /* Ana arka plandan biraz daha koyu (veya aynı) */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  white-space: pre-wrap; /* Satır atlamalarını koru ve aşağı kaydır */
+  word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
+  color: #e0e0e0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* YZ'nın cevabındaki başlıkları (Rafta Gördüklerim) kalın yap */
+.book-list-pre strong {
+  color: var(--primary-color);
+}
+
+/* 8. Sunucu Yanıtı Alanı */
+.response-area {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--success-color);
+  background-color: rgba(72, 187, 120, 0.1); /* Hafif yeşil arka plan */
+}
+
+.response-area h2 {
+  color: var(--success-color); /* Başarı yeşili */
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(72, 187, 120, 0.5);
+  text-align: left;
+}
+
+.response-area p {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  margin: 0;
 }
 
 /* src/App.css dosyasının en altına ekle */
 
-.book-list-container {
-  margin-top: 20px;
+/* 9. Ana Yerleşim (İki Sütunlu Yapı) */
+.main-layout {
+  display: flex; /* İçindeki öğeleri (iki .section) yanyana diz */
+  gap: 25px; /* Aralarına 25px boşluk koy */
+  align-items: flex-start; /* Kartları yukarıdan hizala (biri uzarsa diğeri sarkmasın) */
 }
 
-.book-list-container h3 {
-  margin-bottom: 10px;
-}
-
-.book-list-pre {
-  background-color: #f8f9fa; /* Açık gri arka plan */
-  border: 1px solid #dee2e6;
-  border-radius: 5px;
-  padding: 15px;
-  white-space: pre-wrap; /* Uzun satırların aşağı kaymasını sağlar */
-  word-wrap: break-word; /* Kelimeleri kırar */
-  font-family: Consolas, 'Courier New', monospace; /* Kod yazı tipi */
-  color: #212529; /* Koyu yazı rengi */
+/* Ana yerleşim içindeki her bir kart (.section) */
+.main-layout > .section {
+  flex: 1; /* Eşit yer kapla (1:1 oranında, yani %50 %50) */
+  margin-top: 0; /* Bu iki kartın üst boşluğunu 'gap' hallettiği için sıfırla */
 }
